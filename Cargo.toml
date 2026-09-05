@@ -4,3 +4,7 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
+macroquad = "0.4.16"
+wasm-opt = "0.116.1"
+wasm-pack = "0.15.0"
+wasm-tools = "1.258.0"
