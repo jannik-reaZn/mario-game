@@ -5,6 +5,4 @@ edition = "2024"
 
 [dependencies]
 macroquad = "0.4.16"
-wasm-opt = "0.116.1"
-wasm-pack = "0.15.0"
-wasm-tools = "1.258.0"
+getrandom = { version = "0.4.3", features = ["wasm_js"] }
