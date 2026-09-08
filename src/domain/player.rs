@@ -1,4 +1,4 @@
-use crate::domain::position::Position;
+use crate::domain::position::{Position, PositionError};
 use macroquad::color::Color;
 
 pub const GRAVITY: f32 = 9.81 * 100.0;
@@ -30,24 +30,17 @@ pub struct Player {
 ///
 /// y: The position on y-axis
 /// dt: Delta time
-///
-/// Example:
-/// ↑
-//  |       *
-//  |      * *
-//  |     *   *
-//  |    *     *
-//  |   *       *
-//  |  *         *
-//  | *           *
-//  |*             *
-//──┴──────────────── ground
 impl Player {
-    pub fn calculate_y_position(&mut self, dt: f32) -> Result<Position, String> {
+    pub fn calculate_y_position(&mut self, dt: f32) -> Result<Position, PositionError> {
         self.velocity += GRAVITY * dt;
 
         let y = self.position.get_y() + self.velocity * dt;
 
         Position::new(self.position.get_x(), y)
+    }
+
+    pub fn update_position(player: &mut Player, dt: f32) -> Result<(), PositionError> {
+        player.position = player.calculate_y_position(dt)?;
+        Ok(())
     }
 }

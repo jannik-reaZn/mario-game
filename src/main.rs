@@ -14,8 +14,7 @@ async fn main() {
     let mut player = Player {
         radius: 16.0,
         velocity: 0.0,
-        position: Position::new(get_screen_width() / 2.0, get_screen_height() / 2.0)
-            .expect("X or Y position cannot be < 0"),
+        position: Position::new(get_screen_width() / 2.0, get_screen_height() / 2.0).expect("Ok"),
         color: PLAYER_COLOR,
     };
 
@@ -28,18 +27,12 @@ async fn main() {
 
         // Movement Right
         if is_key_down(KeyCode::Right) {
-            player.position = player
-                .position
-                .move_by(MOVEMENT_SPEED * delta_time, 0.0)
-                .expect("Invalid position");
+            player.position.move_x(MOVEMENT_SPEED * delta_time)
         }
 
         // Movement Left
         if is_key_down(KeyCode::Left) {
-            player.position = player
-                .position
-                .move_by(-MOVEMENT_SPEED * delta_time, 0.0)
-                .expect("Invalid position");
+            player.position.move_x(-MOVEMENT_SPEED * delta_time)
         }
 
         // Movement Jump
@@ -54,8 +47,7 @@ async fn main() {
 
         // Ground Collision
         if player.position.get_y() >= GROUND_Y - player.radius {
-            player.position =
-                Position::new(player.position.get_x(), GROUND_Y - player.radius).expect("Someting");
+            player.position.set_y(GROUND_Y - player.radius);
             player.velocity = 0.0;
         }
 
@@ -65,7 +57,7 @@ async fn main() {
             0.0 + player.radius / 2.0,
             screen_width(),
         );
-        player.position = Position::new(x, player.position.get_y()).expect("Someting");
+        player.position.set_x(x);
 
         // Boxes
         draw_line(0.0, GROUND_Y, 1000.0, GROUND_Y, 15.0, BLACK);
