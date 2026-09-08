@@ -1,4 +1,5 @@
 use macroquad::prelude::*;
+mod application;
 mod domain;
 mod presentation;
 
