@@ -4,8 +4,9 @@ mod domain;
 mod presentation;
 
 use domain::constants::GAME_NAME;
-use domain::player::{JUMP_STRENGTH, Player, Velocity};
+use domain::player::{JUMP_STRENGTH, Player};
 use domain::position::Position;
+use domain::velocity::Velocity;
 use presentation::constants::{BACKGROUND_COLOR, GROUND_Y, MOVEMENT_SPEED, PLAYER_COLOR};
 use presentation::window::{get_current_frame_time, get_screen_height, get_screen_width};
 
