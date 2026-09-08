@@ -1,3 +1,4 @@
+use crate::domain::position::Position;
 use macroquad::color::Color;
 
 pub const GRAVITY: f32 = 9.81 * 100.0;
@@ -18,8 +19,8 @@ pub enum PlayerMovement {
 pub struct Player {
     pub radius: f32,
     pub velocity: f32,
-    pub position: (f32, f32),
-    pub color: Color, // TODO this needs to be String instead
+    pub position: Position,
+    pub color: Color, // TODO this needs to be String instead of Color
 }
 
 /// Calculates the next y position after each frame.
@@ -42,8 +43,11 @@ pub struct Player {
 //  |*             *
 //──┴──────────────── ground
 impl Player {
-    pub fn calculate_y_position(&mut self, dt: f32) {
+    pub fn calculate_y_position(&mut self, dt: f32) -> Result<Position, String> {
         self.velocity += GRAVITY * dt;
-        self.position.1 += self.velocity * dt;
+
+        let y = self.position.get_y() + self.velocity * dt;
+
+        Position::new(self.position.get_x(), y)
     }
 }
