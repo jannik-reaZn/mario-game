@@ -2,7 +2,19 @@ use macroquad::color::Color;
 
 pub const GRAVITY: f32 = 9.81 * 100.0;
 pub const JUMP_STRENGTH: f32 = 500.0;
-// For now body is circular
+
+pub enum PlayerState {
+    Idle,
+    Jumping,
+    Falling,
+}
+
+pub enum PlayerMovement {
+    Right,
+    Left,
+    Jump,
+}
+
 pub struct Player {
     pub radius: f32,
     pub velocity: f32,
