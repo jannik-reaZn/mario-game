@@ -28,9 +28,3 @@ wasm-pack build
 - https://rustwasm.github.io/docs/book/game-of-life/setup.html
 
 # TODO
-
-Update npm
-
-```bash
-npm install -g npm@12.0.2
-```
