@@ -16,9 +16,33 @@ pub enum PlayerMovement {
     Jump,
 }
 
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub struct Velocity {
+    value: f32,
+}
+
+impl Velocity {
+    pub fn new(value: f32) -> Self {
+        Self { value }
+    }
+
+    pub fn get_value(&self) -> f32 {
+        self.value
+    }
+    pub fn accelerate(&self, acceleration: f32, dt: f32) -> Self {
+        Self {
+            value: self.value + acceleration * dt,
+        }
+    }
+
+    pub fn stationary() -> Self {
+        Self { value: 0.0 }
+    }
+}
+
 pub struct Player {
     pub radius: f32,
-    pub velocity: f32,
+    pub velocity: Velocity,
     pub position: Position,
     pub color: Color, // TODO this needs to be String instead of Color
 }
@@ -32,15 +56,10 @@ pub struct Player {
 /// dt: Delta time
 impl Player {
     pub fn calculate_y_position(&mut self, dt: f32) -> Result<Position, PositionError> {
-        self.velocity += GRAVITY * dt;
+        self.velocity = self.velocity.accelerate(GRAVITY, dt);
 
-        let y = self.position.get_y() + self.velocity * dt;
+        let y = self.position.get_y() + self.velocity.get_value() * dt;
 
         Position::new(self.position.get_x(), y)
-    }
-
-    pub fn update_position(player: &mut Player, dt: f32) -> Result<(), PositionError> {
-        player.position = player.calculate_y_position(dt)?;
-        Ok(())
     }
 }

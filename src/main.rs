@@ -4,7 +4,7 @@ mod domain;
 mod presentation;
 
 use domain::constants::GAME_NAME;
-use domain::player::{JUMP_STRENGTH, Player};
+use domain::player::{JUMP_STRENGTH, Player, Velocity};
 use domain::position::Position;
 use presentation::constants::{BACKGROUND_COLOR, GROUND_Y, MOVEMENT_SPEED, PLAYER_COLOR};
 use presentation::window::{get_current_frame_time, get_screen_height, get_screen_width};
@@ -13,7 +13,7 @@ use presentation::window::{get_current_frame_time, get_screen_height, get_screen
 async fn main() {
     let mut player = Player {
         radius: 16.0,
-        velocity: 0.0,
+        velocity: Velocity::new(0.0),
         position: Position::new(get_screen_width() / 2.0, get_screen_height() / 2.0).expect("Ok"),
         color: PLAYER_COLOR,
     };
@@ -37,7 +37,7 @@ async fn main() {
 
         // Movement Jump
         if is_key_pressed(KeyCode::Space) {
-            player.velocity = -JUMP_STRENGTH;
+            player.velocity = Velocity::new(-JUMP_STRENGTH);
         }
         // Gravity + vertical movement
         match player.calculate_y_position(delta_time) {
@@ -48,7 +48,7 @@ async fn main() {
         // Ground Collision
         if player.position.get_y() >= GROUND_Y - player.radius {
             player.position.set_y(GROUND_Y - player.radius);
-            player.velocity = 0.0;
+            player.velocity = Velocity::stationary();
         }
 
         // Make sure that the player does not run outside the screen
