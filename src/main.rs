@@ -3,13 +3,16 @@ mod application;
 mod domain;
 mod presentation;
 
+use application::movement_use_case::move_player;
 use domain::constants::GAME_NAME;
-use domain::player::{JUMP_STRENGTH, Player};
+use domain::player::Player;
 use domain::position::Position;
 use domain::radius::Radius;
 use domain::velocity::Velocity;
-use presentation::constants::{BACKGROUND_COLOR, GROUND_Y, MOVEMENT_SPEED, PLAYER_COLOR};
+use presentation::constants::{BACKGROUND_COLOR, GROUND_Y, PLAYER_COLOR};
 use presentation::window::{get_current_frame_time, get_screen_height, get_screen_width};
+
+use crate::domain::movement::PlayerMovement;
 
 #[macroquad::main("Mario 2D Game")]
 async fn main() {
@@ -29,34 +32,32 @@ async fn main() {
 
         // Movement Right
         if is_key_down(KeyCode::Right) {
-            player.position = player.position.move_x(MOVEMENT_SPEED * delta_time).unwrap();
+            move_player(&mut player, PlayerMovement::Right, delta_time)
+                .expect("Player movement should produce a valid position");
         }
 
         // Movement Left
         if is_key_down(KeyCode::Left) {
-            player.position = player
-                .position
-                .move_x(-MOVEMENT_SPEED * delta_time)
-                .unwrap();
+            move_player(&mut player, PlayerMovement::Left, delta_time)
+                .expect("Player movement should produce a valid position");
         }
 
         // Movement Jump
         if is_key_pressed(KeyCode::Space) {
-            player.velocity = Velocity::new(-JUMP_STRENGTH);
+            move_player(&mut player, PlayerMovement::Jump, delta_time)
+                .expect("Jump should always be valid");
         }
         // Gravity + vertical movement
-        match player.calculate_y_position(delta_time) {
-            Ok(position) => player.position = position,
-            Err(_) => std::process::exit(1),
-        }
+        player.apply_gravity(delta_time);
+        player
+            .update_position(delta_time)
+            .expect("Player physics should produce a valid position");
 
         // Ground Collision
         if player.position.get_y() >= GROUND_Y - player.radius.value() {
-            player.position = player
-                .position
-                .with_y(GROUND_Y - player.radius.value())
-                .unwrap();
-            player.velocity = Velocity::stationary();
+            player
+                .land(GROUND_Y)
+                .expect("Ground position should always be valid");
         }
 
         // Make sure that the player does not run outside the screen

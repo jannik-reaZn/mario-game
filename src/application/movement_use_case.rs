@@ -1,11 +1,27 @@
 use crate::domain::movement::PlayerMovement;
-use crate::domain::position::{Position, PositionError};
+use crate::domain::player::Player;
+use crate::domain::position::PositionError;
 
-#[allow(dead_code)]
-pub fn movement_use_case(movement: PlayerMovement) -> Result<Position, PositionError> {
+use crate::presentation::constants::MOVEMENT_SPEED;
+
+pub fn move_player(
+    player: &mut Player,
+    movement: PlayerMovement,
+    dt: f32,
+) -> Result<(), PositionError> {
     match movement {
-        PlayerMovement::Right => Position::new(0.0, 0.0),
-        PlayerMovement::Left => Position::new(0.0, 0.0),
-        PlayerMovement::Jump => Position::new(0.0, 0.0),
+        PlayerMovement::Right => {
+            player.position = player.move_right(MOVEMENT_SPEED * dt)?;
+        }
+
+        PlayerMovement::Left => {
+            player.position = player.move_left(MOVEMENT_SPEED * dt)?;
+        }
+
+        PlayerMovement::Jump => {
+            player.jump();
+        }
     }
+
+    Ok(())
 }

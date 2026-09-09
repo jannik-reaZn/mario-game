@@ -18,11 +18,36 @@ pub struct Player {
 /// Eventually vy reaches zero at the top of the jump.
 /// The velocity becomes positive (downward).
 impl Player {
-    pub fn calculate_y_position(&mut self, dt: f32) -> Result<Position, PositionError> {
-        self.velocity = self.velocity.accelerate(GRAVITY, dt);
+    pub fn move_right(&self, amount: f32) -> Result<Position, PositionError> {
+        self.position.move_x(amount)
+    }
 
+    pub fn move_left(&self, amount: f32) -> Result<Position, PositionError> {
+        self.position.move_x(-amount)
+    }
+
+    pub fn jump(&mut self) {
+        self.velocity = Velocity::new(-JUMP_STRENGTH);
+    }
+
+    pub fn apply_gravity(&mut self, dt: f32) {
+        self.velocity = self.velocity.accelerate(GRAVITY, dt)
+    }
+
+    pub fn calculate_next_position(&self, dt: f32) -> Result<Position, PositionError> {
         let y = self.position.get_y() + self.velocity.value() * dt;
 
         Position::new(self.position.get_x(), y)
+    }
+
+    pub fn update_position(&mut self, dt: f32) -> Result<(), PositionError> {
+        self.position = self.calculate_next_position(dt)?;
+        Ok(())
+    }
+
+    pub fn land(&mut self, ground_y: f32) -> Result<(), PositionError> {
+        self.position = self.position.with_y(ground_y - self.radius.value())?;
+        self.velocity = Velocity::stationary();
+        Ok(())
     }
 }

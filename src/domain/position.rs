@@ -24,7 +24,7 @@ impl Position {
     }
 
     /// Creates a new position with explicit x-coordinate
-    pub fn with_x(&mut self, x: f32) -> Result<Position, PositionError> {
+    pub fn with_x(&self, x: f32) -> Result<Position, PositionError> {
         Position::new(x, self.y)
     }
     /// Creates a new position with explicit y-coordinate
@@ -33,8 +33,8 @@ impl Position {
     }
 
     /// Creates a new position with updated x-coordinate
-    pub fn move_x(&mut self, amount: f32) -> Result<Position, PositionError> {
-        let new_x = (self.x + amount).max(0.0);
+    pub fn move_x(&self, amount: f32) -> Result<Self, PositionError> {
+        let new_x = self.x + amount;
         Position::new(new_x, self.y)
     }
 }
