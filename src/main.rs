@@ -13,6 +13,7 @@ use presentation::constants::{BACKGROUND_COLOR, GROUND_Y, PLAYER_COLOR};
 use presentation::window::{get_current_frame_time, get_screen_height, get_screen_width};
 
 use crate::domain::movement::PlayerMovement;
+use crate::domain::state::State;
 
 #[macroquad::main("Mario 2D Game")]
 async fn main() {
@@ -20,6 +21,7 @@ async fn main() {
         radius: Radius::new(16.0).expect("Ok"),
         velocity: Velocity::new(0.0),
         position: Position::new(get_screen_width() / 2.0, get_screen_height() / 2.0).expect("Ok"),
+        state: State::Grounded,
         color: PLAYER_COLOR,
     };
 
@@ -54,7 +56,7 @@ async fn main() {
             .expect("Player physics should produce a valid position");
 
         // Ground Collision
-        if player.position.get_y() >= GROUND_Y - player.radius.value() {
+        if player.position.y() >= GROUND_Y - player.radius.value() {
             player
                 .land(GROUND_Y)
                 .expect("Ground position should always be valid");
@@ -62,7 +64,7 @@ async fn main() {
 
         // Make sure that the player does not run outside the screen
         let x = clamp(
-            player.position.get_x(),
+            player.position.x(),
             player.radius.value() / 2.0,
             screen_width(),
         );
@@ -71,8 +73,8 @@ async fn main() {
         // Boxes
         draw_line(0.0, GROUND_Y, 1000.0, GROUND_Y, 15.0, BLACK);
         draw_circle(
-            player.position.get_x(),
-            player.position.get_y(),
+            player.position.x(),
+            player.position.y(),
             player.radius.value(),
             player.color,
         );

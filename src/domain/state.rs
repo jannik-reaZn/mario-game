@@ -1,6 +1,5 @@
-#[allow(dead_code)]
-pub enum PlayerState {
-    Idle,
+#[derive(PartialEq)]
+pub enum State {
+    Grounded,
     Jumping,
-    Falling,
 }
