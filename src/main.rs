@@ -28,12 +28,15 @@ async fn main() {
 
         // Movement Right
         if is_key_down(KeyCode::Right) {
-            player.position = player.position.move_x(MOVEMENT_SPEED * delta_time)
+            player.position = player.position.move_x(MOVEMENT_SPEED * delta_time).unwrap();
         }
 
         // Movement Left
         if is_key_down(KeyCode::Left) {
-            player.position = player.position.move_x(-MOVEMENT_SPEED * delta_time)
+            player.position = player
+                .position
+                .move_x(-MOVEMENT_SPEED * delta_time)
+                .unwrap();
         }
 
         // Movement Jump
@@ -48,7 +51,7 @@ async fn main() {
 
         // Ground Collision
         if player.position.get_y() >= GROUND_Y - player.radius {
-            player.position = player.position.with_y(GROUND_Y - player.radius);
+            player.position = player.position.with_y(GROUND_Y - player.radius).unwrap();
             player.velocity = Velocity::stationary();
         }
 
@@ -58,7 +61,7 @@ async fn main() {
             0.0 + player.radius / 2.0,
             screen_width(),
         );
-        player.position = player.position.with_x(x);
+        player.position = player.position.with_x(x).unwrap();
 
         // Boxes
         draw_line(0.0, GROUND_Y, 1000.0, GROUND_Y, 15.0, BLACK);
