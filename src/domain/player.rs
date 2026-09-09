@@ -1,4 +1,5 @@
 use crate::domain::position::{Position, PositionError};
+use crate::domain::radius::Radius;
 use crate::domain::velocity::Velocity;
 use macroquad::color::Color;
 
@@ -6,7 +7,7 @@ pub const GRAVITY: f32 = 9.81 * 100.0;
 pub const JUMP_STRENGTH: f32 = 500.0;
 
 pub struct Player {
-    pub radius: f32,
+    pub radius: Radius,
     pub velocity: Velocity,
     pub position: Position,
     pub color: Color, // TODO this needs to be String instead of Color

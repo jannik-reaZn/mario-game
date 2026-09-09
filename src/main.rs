@@ -6,6 +6,7 @@ mod presentation;
 use domain::constants::GAME_NAME;
 use domain::player::{JUMP_STRENGTH, Player};
 use domain::position::Position;
+use domain::radius::Radius;
 use domain::velocity::Velocity;
 use presentation::constants::{BACKGROUND_COLOR, GROUND_Y, MOVEMENT_SPEED, PLAYER_COLOR};
 use presentation::window::{get_current_frame_time, get_screen_height, get_screen_width};
@@ -13,7 +14,7 @@ use presentation::window::{get_current_frame_time, get_screen_height, get_screen
 #[macroquad::main("Mario 2D Game")]
 async fn main() {
     let mut player = Player {
-        radius: 16.0,
+        radius: Radius::new(16.0).expect("Ok"),
         velocity: Velocity::new(0.0),
         position: Position::new(get_screen_width() / 2.0, get_screen_height() / 2.0).expect("Ok"),
         color: PLAYER_COLOR,
@@ -50,15 +51,18 @@ async fn main() {
         }
 
         // Ground Collision
-        if player.position.get_y() >= GROUND_Y - player.radius {
-            player.position = player.position.with_y(GROUND_Y - player.radius).unwrap();
+        if player.position.get_y() >= GROUND_Y - player.radius.get_value() {
+            player.position = player
+                .position
+                .with_y(GROUND_Y - player.radius.get_value())
+                .unwrap();
             player.velocity = Velocity::stationary();
         }
 
         // Make sure that the player does not run outside the screen
         let x = clamp(
             player.position.get_x(),
-            0.0 + player.radius / 2.0,
+            player.radius.get_value() / 2.0,
             screen_width(),
         );
         player.position = player.position.with_x(x).unwrap();
@@ -68,7 +72,7 @@ async fn main() {
         draw_circle(
             player.position.get_x(),
             player.position.get_y(),
-            player.radius,
+            player.radius.get_value(),
             player.color,
         );
 
