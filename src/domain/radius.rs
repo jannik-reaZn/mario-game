@@ -10,7 +10,7 @@ impl Radius {
         Ok(Self { value: radius })
     }
 
-    pub fn get_value(&self) -> f32 {
+    pub fn value(&self) -> f32 {
         self.value
     }
 }

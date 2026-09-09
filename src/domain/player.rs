@@ -21,7 +21,7 @@ impl Player {
     pub fn calculate_y_position(&mut self, dt: f32) -> Result<Position, PositionError> {
         self.velocity = self.velocity.accelerate(GRAVITY, dt);
 
-        let y = self.position.get_y() + self.velocity.get_value() * dt;
+        let y = self.position.get_y() + self.velocity.value() * dt;
 
         Position::new(self.position.get_x(), y)
     }

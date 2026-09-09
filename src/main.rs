@@ -51,10 +51,10 @@ async fn main() {
         }
 
         // Ground Collision
-        if player.position.get_y() >= GROUND_Y - player.radius.get_value() {
+        if player.position.get_y() >= GROUND_Y - player.radius.value() {
             player.position = player
                 .position
-                .with_y(GROUND_Y - player.radius.get_value())
+                .with_y(GROUND_Y - player.radius.value())
                 .unwrap();
             player.velocity = Velocity::stationary();
         }
@@ -62,7 +62,7 @@ async fn main() {
         // Make sure that the player does not run outside the screen
         let x = clamp(
             player.position.get_x(),
-            player.radius.get_value() / 2.0,
+            player.radius.value() / 2.0,
             screen_width(),
         );
         player.position = player.position.with_x(x).unwrap();
@@ -72,7 +72,7 @@ async fn main() {
         draw_circle(
             player.position.get_x(),
             player.position.get_y(),
-            player.radius.get_value(),
+            player.radius.value(),
             player.color,
         );
 

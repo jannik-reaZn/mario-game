@@ -9,7 +9,7 @@ impl Velocity {
     }
 
     /// Returns the velocity
-    pub fn get_value(&self) -> f32 {
+    pub fn value(&self) -> f32 {
         self.value
     }
     /// Creates a new velocity with updated velocity
