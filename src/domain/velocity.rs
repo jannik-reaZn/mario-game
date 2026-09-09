@@ -8,15 +8,18 @@ impl Velocity {
         Self { value }
     }
 
+    /// Returns the velocity
     pub fn get_value(&self) -> f32 {
         self.value
     }
+    /// Creates a new velocity with updated velocity
     pub fn accelerate(&self, acceleration: f32, dt: f32) -> Self {
         Self {
             value: self.value + acceleration * dt,
         }
     }
 
+    /// Created a new velocity with 0.0
     pub fn stationary() -> Self {
         Self { value: 0.0 }
     }
