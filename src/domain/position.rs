@@ -10,26 +10,29 @@ impl Position {
         Ok(Self(x, y))
     }
 
-    // Getters
+    /// Returns the x-coordinate
     pub fn get_x(&self) -> f32 {
         self.0
     }
 
+    /// Returns the y-coordinate
     pub fn get_y(&self) -> f32 {
         self.1
     }
 
-    // Setters
-    pub fn set_x(&mut self, x: f32) {
-        self.0 = x;
+    /// Creates a new position with explicit x-coordinate
+    pub fn with_x(&mut self, x: f32) -> Self {
+        Self(x, self.1)
+    }
+    /// Creates a new position with explicit y-coordinate
+    pub fn with_y(&self, y: f32) -> Self {
+        Self(self.0, y)
     }
 
-    pub fn set_y(&mut self, y: f32) {
-        self.1 = y;
-    }
-
-    pub fn move_x(&mut self, amount: f32) {
-        self.0 = (self.0 + amount).max(0.0);
+    /// Creates a new position with updated x-coordinate
+    pub fn move_x(&mut self, amount: f32) -> Self {
+        let new_x = (self.0 + amount).max(0.0);
+        Self(new_x, self.1)
     }
 }
 
