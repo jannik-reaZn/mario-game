@@ -1,9 +1,9 @@
 use crate::domain::bounds::Bounds;
+use crate::domain::color::Color;
 use crate::domain::position::{Position, PositionError};
 use crate::domain::size::Size;
 use crate::domain::state::State;
 use crate::domain::velocity::Velocity;
-use macroquad::color::Color;
 
 pub const GRAVITY: f32 = 9.81 * 100.0;
 pub const JUMP_STRENGTH: f32 = 500.0;
@@ -13,7 +13,7 @@ pub struct Player {
     pub velocity: Velocity,
     pub position: Position,
     pub state: State,
-    pub color: Color, // TODO this needs to be String instead of Color
+    pub color: Color,
 }
 
 impl Player {

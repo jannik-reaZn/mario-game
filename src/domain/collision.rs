@@ -58,12 +58,12 @@ pub fn detect(player: &Player, obstacle: &Obstacle) -> Option<Collision> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::domain::color::Color;
     use crate::domain::obstacle::ObstacleType;
     use crate::domain::position::Position;
     use crate::domain::size::Size;
     use crate::domain::state::State;
     use crate::domain::velocity::Velocity;
-    use macroquad::color::BLUE;
 
     // Obstacle spans x 100..200, y 100..150
     fn obstacle() -> Obstacle {
@@ -81,7 +81,7 @@ mod tests {
             velocity: Velocity::stationary(),
             position: Position::new(x, y).unwrap(),
             state: State::Grounded,
-            color: BLUE,
+            color: Color::Blue,
         }
     }
 

@@ -1,8 +1,9 @@
-use macroquad::color::{BLUE, Color, WHITE};
+use crate::domain::color::Color;
 
 // COLOR
-pub const BACKGROUND_COLOR: Color = WHITE;
-pub const PLAYER_COLOR: Color = BLUE;
+pub const BACKGROUND_COLOR: Color = Color::White;
+pub const PLAYER_COLOR: Color = Color::Blue;
+pub const OBSTACLE_COLOR: Color = Color::Black;
 
 // WINDOW
 pub const MOVEMENT_SPEED: f32 = 100.0;

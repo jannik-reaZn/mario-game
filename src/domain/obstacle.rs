@@ -1,22 +1,13 @@
 use crate::domain::{bounds::Bounds, position::Position, size::Size};
 
-pub enum ObstacleType {
-    Solid,
-}
-
 pub struct Obstacle {
-    obstacle_type: ObstacleType,
     position: Position,
     size: Size,
 }
 
 impl Obstacle {
-    pub fn new(obstacle_type: ObstacleType, position: Position, size: Size) -> Self {
-        Self {
-            obstacle_type,
-            position,
-            size,
-        }
+    pub fn new(position: Position, size: Size) -> Self {
+        Self { position, size }
     }
 
     pub fn bounds(&self) -> Bounds {

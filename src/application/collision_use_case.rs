@@ -27,13 +27,13 @@ pub fn resolve_collisions(world: &mut World) -> Result<(), PositionError> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::domain::color::Color;
     use crate::domain::obstacle::{Obstacle, ObstacleType};
     use crate::domain::player::Player;
     use crate::domain::position::Position;
     use crate::domain::size::Size;
     use crate::domain::state::State;
     use crate::domain::velocity::Velocity;
-    use macroquad::color::BLUE;
 
     fn player_at(x: f32, y: f32, velocity: f32) -> Player {
         Player {
@@ -41,7 +41,7 @@ mod tests {
             velocity: Velocity::new(velocity),
             position: Position::new(x, y).unwrap(),
             state: State::Jumping,
-            color: BLUE,
+            color: Color::Blue,
         }
     }
 
