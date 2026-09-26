@@ -6,4 +6,5 @@ pub const PLAYER_COLOR: Color = Color::Blue;
 pub const OBSTACLE_COLOR: Color = Color::Black;
 
 // WINDOW
+pub const GAME_NAME: &str = "Mario 2D Game";
 pub const GROUND_Y: f32 = 800.0;

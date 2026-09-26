@@ -4,7 +4,6 @@ mod presentation;
 
 use application::collision_use_case::resolve_collisions;
 use application::movement_use_case::move_player;
-use domain::constants::GAME_NAME;
 use domain::obstacle::Obstacle;
 use domain::player::Player;
 use domain::position::Position;
@@ -17,11 +16,15 @@ use macroquad::math::clamp;
 use macroquad::shapes::draw_rectangle;
 use macroquad::text::draw_text;
 use macroquad::window::{clear_background, next_frame};
-use presentation::constants::{BACKGROUND_COLOR, GROUND_Y, OBSTACLE_COLOR, PLAYER_COLOR};
+use presentation::constants::{
+    BACKGROUND_COLOR, GAME_NAME, GROUND_Y, OBSTACLE_COLOR, PLAYER_COLOR,
+};
 use presentation::input::read_player_movements;
-use presentation::window::{get_current_frame_time, get_screen_height, get_screen_width};
+use presentation::window::{
+    get_current_frame_time, get_screen_height, get_screen_width, window_conf,
+};
 
-#[macroquad::main("Mario 2D Game")]
+#[macroquad::main(window_conf)]
 async fn main() {
     let player = Player {
         size: Size::new(32.0, 32.0).expect("Ok"),

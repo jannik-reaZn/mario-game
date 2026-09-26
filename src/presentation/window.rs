@@ -1,7 +1,20 @@
+use crate::presentation::constants::GAME_NAME;
 use macroquad::{
     time::get_frame_time,
-    window::{screen_height, screen_width},
+    window::{Conf, screen_height, screen_width},
 };
+
+/// Window settings, handed to `#[macroquad::main(...)]`.
+///
+/// The macro cannot take a constant directly (it only accepts a string
+/// literal or the name of a function returning `Conf`), so this function is
+/// the bridge that lets the title come from `GAME_NAME`.
+pub fn window_conf() -> Conf {
+    Conf {
+        window_title: GAME_NAME.to_owned(),
+        ..Default::default()
+    }
+}
 
 pub fn get_screen_width() -> f32 {
     screen_width()
