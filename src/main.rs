@@ -36,8 +36,12 @@ async fn main() {
 
     let obstacles = vec![
         Obstacle::new(
-            Position::new(0.0, GROUND_Y).expect("Ok"),
+            Position::new(1200.0, GROUND_Y).expect("Ok"),
             Size::new(2000.0, 50.0).expect("Ok"),
+        ),
+        Obstacle::new(
+            Position::new(0.0, GROUND_Y).expect("Ok"),
+            Size::new(1000.0, 50.0).expect("Ok"),
         ),
         Obstacle::new(
             Position::new(300.0, GROUND_Y - 100.0).expect("Ok"),
