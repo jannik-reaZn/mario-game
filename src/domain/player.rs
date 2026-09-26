@@ -7,7 +7,7 @@ use crate::domain::velocity::Velocity;
 
 pub const GRAVITY: f32 = 9.81 * 100.0;
 pub const JUMP_STRENGTH: f32 = 500.0;
-pub const MOVEMENT_SPEED: f32 = 100.0;
+pub const MOVEMENT_SPEED: f32 = 300.0;
 
 pub struct Player {
     pub size: Size,
