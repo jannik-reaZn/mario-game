@@ -1,5 +1,6 @@
+use crate::domain::bounds::Bounds;
 use crate::domain::position::{Position, PositionError};
-use crate::domain::radius::Radius;
+use crate::domain::size::Size;
 use crate::domain::state::State;
 use crate::domain::velocity::Velocity;
 use macroquad::color::Color;
@@ -8,7 +9,7 @@ pub const GRAVITY: f32 = 9.81 * 100.0;
 pub const JUMP_STRENGTH: f32 = 500.0;
 
 pub struct Player {
-    pub radius: Radius,
+    pub size: Size,
     pub velocity: Velocity,
     pub position: Position,
     pub state: State,
@@ -16,6 +17,15 @@ pub struct Player {
 }
 
 impl Player {
+    pub fn bounds(&self) -> Bounds {
+        Bounds::new(
+            self.position.x(),
+            self.position.x() + self.size.width(),
+            self.position.y(),
+            self.position.y() + self.size.height(),
+        )
+    }
+
     pub fn jump(&mut self) {
         self.velocity = Velocity::new(-JUMP_STRENGTH);
         self.state = State::Jumping;
@@ -34,9 +44,32 @@ impl Player {
     }
 
     pub fn land(&mut self, ground_y: f32) -> Result<(), PositionError> {
-        self.position = self.position.with_y(ground_y - self.radius.value())?;
+        self.position = self.position.with_y(ground_y - self.size.height())?;
         self.velocity = Velocity::stationary();
         self.state = State::Grounded;
+
+        Ok(())
+    }
+
+    pub fn become_airborne(&mut self) {
+        self.state = State::Jumping;
+    }
+
+    pub fn bump_head(&mut self, ceiling_y: f32) -> Result<(), PositionError> {
+        self.position = self.position.with_y(ceiling_y)?;
+        self.velocity = Velocity::stationary();
+
+        Ok(())
+    }
+
+    pub fn stop_left_of(&mut self, wall_x: f32) -> Result<(), PositionError> {
+        self.position = self.position.with_x(wall_x - self.size.width())?;
+
+        Ok(())
+    }
+
+    pub fn stop_right_of(&mut self, wall_x: f32) -> Result<(), PositionError> {
+        self.position = self.position.with_x(wall_x)?;
 
         Ok(())
     }
