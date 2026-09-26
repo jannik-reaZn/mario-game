@@ -29,6 +29,17 @@ impl Player {
         )
     }
 
+    /// Moves the player horizontally, negative values walk left.
+    ///
+    /// The world starts at `x = 0`, so walking left stops there instead of
+    /// producing an invalid (negative) position.
+    pub fn walk(&mut self, amount: f32) -> Result<(), PositionError> {
+        let x = (self.position.x() + amount).max(0.0);
+        self.position = self.position.with_x(x)?;
+
+        Ok(())
+    }
+
     pub fn jump(&mut self) {
         self.velocity = Velocity::new(-JUMP_STRENGTH);
         self.state = State::Jumping;

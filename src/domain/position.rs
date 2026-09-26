@@ -31,12 +31,6 @@ impl Position {
     pub fn with_y(&self, y: f32) -> Result<Position, PositionError> {
         Position::new(self.x, y)
     }
-
-    /// Creates a new position with updated x-coordinate
-    pub fn move_x(&self, amount: f32) -> Result<Self, PositionError> {
-        let new_x = self.x + amount;
-        Position::new(new_x, self.y)
-    }
 }
 
 #[derive(Debug)]
