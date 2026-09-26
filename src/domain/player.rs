@@ -1,5 +1,6 @@
 use crate::domain::bounds::Bounds;
 use crate::domain::color::Color;
+use crate::domain::life::Life;
 use crate::domain::position::{Position, PositionError};
 use crate::domain::size::Size;
 use crate::domain::state::State;
@@ -10,6 +11,7 @@ pub const JUMP_STRENGTH: f32 = 500.0;
 pub const MOVEMENT_SPEED: f32 = 300.0;
 
 pub struct Player {
+    pub life: Life,
     pub size: Size,
     pub velocity: Velocity,
     pub position: Position,
@@ -73,5 +75,26 @@ impl Player {
         self.position = self.position.with_x(wall_x)?;
 
         Ok(())
+    }
+
+    /// True once the player has dropped completely below `limit_y`.
+    ///
+    /// `y` grows downwards, so "below" means a larger `y`. Touching the limit
+    /// is not enough, the top edge of the player has to pass it.
+    pub fn has_fallen_below(&self, limit_y: f32) -> bool {
+        self.bounds().top() > limit_y
+    }
+
+    pub fn is_alive(&self) -> bool {
+        self.life == Life::Alive
+    }
+
+    pub fn is_dead(&self) -> bool {
+        self.life == Life::Dead
+    }
+
+    pub fn die(&mut self) {
+        self.life = Life::Dead;
+        self.velocity = Velocity::stationary();
     }
 }

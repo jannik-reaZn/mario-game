@@ -1,91 +1,64 @@
 mod application;
 mod domain;
 mod presentation;
+mod world_factory;
 
+use application::check_player_death_use_case::check_player_death;
 use application::collision_use_case::resolve_collisions;
 use application::movement_use_case::move_player;
-use domain::obstacle::Obstacle;
-use domain::player::Player;
-use domain::position::Position;
-use domain::size::Size;
-use domain::state::State;
-use domain::velocity::Velocity;
-use domain::world::World;
 use macroquad::color::DARKGRAY;
 use macroquad::math::clamp;
 use macroquad::shapes::draw_rectangle;
 use macroquad::text::draw_text;
 use macroquad::window::{clear_background, next_frame};
-use presentation::constants::{
-    BACKGROUND_COLOR, GAME_NAME, GROUND_Y, OBSTACLE_COLOR, PLAYER_COLOR,
-};
+use presentation::constants::{BACKGROUND_COLOR, GAME_NAME, OBSTACLE_COLOR};
+use presentation::game_over::draw_game_over;
 use presentation::input::read_player_movements;
 use presentation::window::{
     get_current_frame_time, get_screen_height, get_screen_width, window_conf,
 };
+use world_factory::build_world;
 
 #[macroquad::main(window_conf)]
 async fn main() {
-    let player = Player {
-        size: Size::new(32.0, 32.0).expect("Ok"),
-        velocity: Velocity::new(0.0),
-        position: Position::new(get_screen_width() / 2.0, get_screen_height() / 2.0).expect("Ok"),
-        state: State::Grounded,
-        color: PLAYER_COLOR,
-    };
-
-    let obstacles = vec![
-        Obstacle::new(
-            Position::new(1200.0, GROUND_Y).expect("Ok"),
-            Size::new(2000.0, 50.0).expect("Ok"),
-        ),
-        Obstacle::new(
-            Position::new(0.0, GROUND_Y).expect("Ok"),
-            Size::new(1000.0, 50.0).expect("Ok"),
-        ),
-        Obstacle::new(
-            Position::new(300.0, GROUND_Y - 100.0).expect("Ok"),
-            Size::new(150.0, 30.0).expect("Ok"),
-        ),
-        Obstacle::new(
-            Position::new(600.0, GROUND_Y - 60.0).expect("Ok"),
-            Size::new(60.0, 60.0).expect("Ok"),
-        ),
-    ];
-
-    let mut world = World::new(player, obstacles);
+    let mut world = build_world(get_screen_width(), get_screen_height());
 
     loop {
         clear_background(BACKGROUND_COLOR.into());
+        let dt = get_current_frame_time();
         draw_text(GAME_NAME, 20.0, 20.0, 30.0, DARKGRAY);
 
-        let delta_time = get_current_frame_time();
+        // A dead player freezes the world; the scene is still drawn below.
+        if world.player().is_alive() {
+            // Input -> movement
+            for movement in read_player_movements() {
+                move_player(world.player_mut(), movement, dt)
+                    .expect("Player movement should produce a valid position");
+            }
 
-        // Input -> movement
-        for movement in read_player_movements() {
-            move_player(world.player_mut(), movement, delta_time)
-                .expect("Player movement should produce a valid position");
+            // Gravity + vertical movement
+            world.player_mut().apply_gravity(dt);
+            world
+                .player_mut()
+                .update_position(dt)
+                .expect("Player physics should produce a valid position");
+
+            // Collisions with obstacles
+            resolve_collisions(&mut world)
+                .expect("Collision resolution should produce a valid position");
+
+            // Falling out of the level (after collisions, so a landing wins)
+            check_player_death(&mut world);
+
+            // Make sure that the player does not run outside the screen
+            let player = world.player_mut();
+            let x = clamp(
+                player.position.x(),
+                0.0,
+                get_screen_width() - player.size.width(),
+            );
+            player.position = player.position.with_x(x).unwrap();
         }
-
-        // Gravity + vertical movement
-        world.player_mut().apply_gravity(delta_time);
-        world
-            .player_mut()
-            .update_position(delta_time)
-            .expect("Player physics should produce a valid position");
-
-        // Collisions with obstacles
-        resolve_collisions(&mut world)
-            .expect("Collision resolution should produce a valid position");
-
-        // Make sure that the player does not run outside the screen
-        let player = world.player_mut();
-        let x = clamp(
-            player.position.x(),
-            0.0,
-            get_screen_width() - player.size.width(),
-        );
-        player.position = player.position.with_x(x).unwrap();
 
         // Render
         for obstacle in world.obstacles() {
@@ -107,6 +80,11 @@ async fn main() {
             player.size.height(),
             player.color.into(),
         );
+
+        // Game over pop-up; a click on "Retry" replaces the whole world
+        if world.player().is_dead() && draw_game_over() {
+            world = build_world(get_screen_width(), get_screen_height());
+        }
 
         next_frame().await
     }

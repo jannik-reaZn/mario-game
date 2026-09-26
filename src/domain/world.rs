@@ -3,11 +3,16 @@ use crate::domain::{obstacle::Obstacle, player::Player};
 pub struct World {
     player: Player,
     obstacles: Vec<Obstacle>,
+    bottom: f32,
 }
 
 impl World {
-    pub fn new(player: Player, obstacles: Vec<Obstacle>) -> Self {
-        Self { player, obstacles }
+    pub fn new(player: Player, obstacles: Vec<Obstacle>, bottom: f32) -> Self {
+        Self {
+            player,
+            obstacles,
+            bottom,
+        }
     }
 
     pub fn player(&self) -> &Player {
@@ -20,5 +25,9 @@ impl World {
 
     pub fn obstacles(&self) -> &[Obstacle] {
         &self.obstacles
+    }
+
+    pub fn bottom(&self) -> f32 {
+        self.bottom
     }
 }

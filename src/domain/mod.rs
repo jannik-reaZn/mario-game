@@ -1,6 +1,7 @@
 pub mod bounds;
 pub mod collision;
 pub mod color;
+pub mod life;
 pub mod movement;
 pub mod obstacle;
 pub mod player;

@@ -59,6 +59,7 @@ pub fn detect(player: &Player, obstacle: &Obstacle) -> Option<Collision> {
 mod tests {
     use super::*;
     use crate::domain::color::Color;
+    use crate::domain::life::Life;
     use crate::domain::position::Position;
     use crate::domain::size::Size;
     use crate::domain::state::State;
@@ -75,6 +76,7 @@ mod tests {
     // 20x20 player with its top-left corner at (x, y)
     fn player_at(x: f32, y: f32) -> Player {
         Player {
+            life: Life::Alive,
             size: Size::new(20.0, 20.0).unwrap(),
             velocity: Velocity::stationary(),
             position: Position::new(x, y).unwrap(),

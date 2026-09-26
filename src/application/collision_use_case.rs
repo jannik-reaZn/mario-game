@@ -28,6 +28,7 @@ pub fn resolve_collisions(world: &mut World) -> Result<(), PositionError> {
 mod tests {
     use super::*;
     use crate::domain::color::Color;
+    use crate::domain::life::Life;
     use crate::domain::obstacle::Obstacle;
     use crate::domain::player::Player;
     use crate::domain::position::Position;
@@ -37,6 +38,7 @@ mod tests {
 
     fn player_at(x: f32, y: f32, velocity: f32) -> Player {
         Player {
+            life: Life::Alive,
             size: Size::new(20.0, 20.0).unwrap(),
             velocity: Velocity::new(velocity),
             position: Position::new(x, y).unwrap(),
@@ -51,7 +53,7 @@ mod tests {
             Position::new(100.0, 100.0).unwrap(),
             Size::new(100.0, 50.0).unwrap(),
         );
-        World::new(player, vec![obstacle])
+        World::new(player, vec![obstacle], 1000.0)
     }
 
     #[test]
