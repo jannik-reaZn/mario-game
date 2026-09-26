@@ -1,4 +1,4 @@
-use crate::domain::collision::{detect, CollisionSide};
+use crate::domain::collision::{CollisionSide, detect};
 use crate::domain::position::PositionError;
 use crate::domain::world::World;
 
@@ -28,7 +28,7 @@ pub fn resolve_collisions(world: &mut World) -> Result<(), PositionError> {
 mod tests {
     use super::*;
     use crate::domain::color::Color;
-    use crate::domain::obstacle::{Obstacle, ObstacleType};
+    use crate::domain::obstacle::Obstacle;
     use crate::domain::player::Player;
     use crate::domain::position::Position;
     use crate::domain::size::Size;
@@ -48,7 +48,6 @@ mod tests {
     // Obstacle spans x 100..200, y 100..150
     fn world_with(player: Player) -> World {
         let obstacle = Obstacle::new(
-            ObstacleType::Solid,
             Position::new(100.0, 100.0).unwrap(),
             Size::new(100.0, 50.0).unwrap(),
         );

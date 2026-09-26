@@ -1,4 +1,3 @@
-use macroquad::prelude::*;
 mod application;
 mod domain;
 mod presentation;
@@ -10,13 +9,17 @@ use domain::obstacle::Obstacle;
 use domain::player::Player;
 use domain::position::Position;
 use domain::size::Size;
+use domain::state::State;
 use domain::velocity::Velocity;
 use domain::world::World;
+use macroquad::color::DARKGRAY;
+use macroquad::math::clamp;
+use macroquad::shapes::draw_rectangle;
+use macroquad::text::draw_text;
+use macroquad::window::{clear_background, next_frame};
 use presentation::constants::{BACKGROUND_COLOR, GROUND_Y, OBSTACLE_COLOR, PLAYER_COLOR};
 use presentation::input::read_player_movements;
 use presentation::window::{get_current_frame_time, get_screen_height, get_screen_width};
-
-use crate::domain::state::State;
 
 #[macroquad::main("Mario 2D Game")]
 async fn main() {
@@ -73,7 +76,7 @@ async fn main() {
         let x = clamp(
             player.position.x(),
             0.0,
-            screen_width() - player.size.width(),
+            get_screen_width() - player.size.width(),
         );
         player.position = player.position.with_x(x).unwrap();
 

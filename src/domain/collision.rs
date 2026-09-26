@@ -59,7 +59,6 @@ pub fn detect(player: &Player, obstacle: &Obstacle) -> Option<Collision> {
 mod tests {
     use super::*;
     use crate::domain::color::Color;
-    use crate::domain::obstacle::ObstacleType;
     use crate::domain::position::Position;
     use crate::domain::size::Size;
     use crate::domain::state::State;
@@ -68,7 +67,6 @@ mod tests {
     // Obstacle spans x 100..200, y 100..150
     fn obstacle() -> Obstacle {
         Obstacle::new(
-            ObstacleType::Solid,
             Position::new(100.0, 100.0).unwrap(),
             Size::new(100.0, 50.0).unwrap(),
         )

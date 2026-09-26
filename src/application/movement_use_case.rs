@@ -1,9 +1,7 @@
 use crate::domain::movement::PlayerMovement;
-use crate::domain::player::Player;
+use crate::domain::player::{MOVEMENT_SPEED, Player};
 use crate::domain::position::PositionError;
-
 use crate::domain::state::State;
-use crate::presentation::constants::MOVEMENT_SPEED;
 
 pub fn move_player(
     player: &mut Player,
