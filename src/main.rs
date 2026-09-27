@@ -6,10 +6,11 @@ mod world_factory;
 use application::check_player_death_use_case::check_player_death;
 use application::collision_use_case::resolve_collisions;
 use application::movement_use_case::move_player;
-use macroquad::color::DARKGRAY;
+use macroquad::color::{DARKGRAY, WHITE};
 use macroquad::math::clamp;
 use macroquad::shapes::draw_rectangle;
 use macroquad::text::draw_text;
+use macroquad::texture::{draw_texture, load_texture};
 use macroquad::window::{clear_background, next_frame};
 use presentation::constants::{BACKGROUND_COLOR, GAME_NAME, OBSTACLE_COLOR};
 use presentation::game_over::draw_game_over;
@@ -22,11 +23,15 @@ use world_factory::build_world;
 #[macroquad::main(window_conf)]
 async fn main() {
     let mut world = build_world(get_screen_width(), get_screen_height());
+    let texture = load_texture("./images/background.png")
+        .await
+        .expect("background.png should be served alongside web/index.html");
 
     loop {
         clear_background(BACKGROUND_COLOR.into());
         let dt = get_current_frame_time();
         draw_text(GAME_NAME, 20.0, 20.0, 30.0, DARKGRAY);
+        draw_texture(&texture, 0.0, 0.0, BACKGROUND_COLOR.into());
 
         // A dead player freezes the world; the scene is still drawn below.
         if world.player().is_alive() {
