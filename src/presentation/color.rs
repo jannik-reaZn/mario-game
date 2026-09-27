@@ -1,5 +1,5 @@
 use crate::domain::color::Color;
-use macroquad::color::{BLACK, BLUE, Color as MqColor, WHITE};
+use macroquad::color::{BLACK, BLUE, Color as MqColor, DARKGRAY, WHITE};
 
 /// Translates the domain's color into the one Macroquad can draw.
 ///
@@ -11,6 +11,7 @@ impl From<Color> for MqColor {
             Color::Blue => BLUE,
             Color::White => WHITE,
             Color::Black => BLACK,
+            Color::DARKGREY => DARKGRAY,
         }
     }
 }

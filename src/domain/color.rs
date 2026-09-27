@@ -8,4 +8,5 @@ pub enum Color {
     Blue,
     White,
     Black,
+    DARKGREY,
 }
